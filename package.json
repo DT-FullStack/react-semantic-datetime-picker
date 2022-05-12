@@ -1,6 +1,6 @@
 {
-  "name": "@dt-fullstack/react-semantic-datetime-picker",
-  "version": "0.0.4",
+  "name": "@codewizard-dt/react-semantic-datetime-picker",
+  "version": "0.0.1",
   "description": "A datetime picker library for React and Semantic UI",
   "scripts": {
     "rollup": "rollup -c"
@@ -39,6 +39,6 @@
   ],
   "types": "dist/index.d.ts",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/DT-FullStack"
+    "registry": "https://npm.pkg.github.com/codewizard-dt"
   }
 }
