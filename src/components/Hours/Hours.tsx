@@ -17,7 +17,7 @@ const Hours = ({ datetime = DateTime.now(), setDatetime, onSet }: HoursProps) =>
 
   return (
     // @ts-ignore
-    <List className="scrolling">
+    <List className="scrolling picker">
       {hours.map((hour, h) =>
         <List.Item key={h} className={datetime.hour === h ? 'active' : ''} content={datetime.set({ hour }).toLocaleString({ hour: 'numeric' })} onClick={() => set({ hour: h })} />
       )}

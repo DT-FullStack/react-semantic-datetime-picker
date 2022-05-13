@@ -24,6 +24,10 @@ export default [
     external: [
       'react',
       'react-dom',
+      'lodash',
+      'luxon',
+      'semantic-ui-css',
+      'semantic-ui-react'
     ],
     plugins: [
       resolve(),

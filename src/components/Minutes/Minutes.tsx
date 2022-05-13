@@ -17,7 +17,7 @@ const Minutes = ({ datetime = DateTime.now(), setDatetime, onSet }: MinutesProps
 
   return (
     // @ts-ignore
-    <List className="scrolling">
+    <List className="scrolling picker">
       {minutes.map((minute, m) =>
         <List.Item key={m} className={datetime.minute === m ? 'active' : ''} content={datetime.set({ minute }).toFormat('mm')} onClick={() => set({ minute: m })} />
       )}

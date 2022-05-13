@@ -4,8 +4,13 @@ import Hours from '../Hours/Hours';
 import { UseDatetime } from '../../index';
 import Minutes from '../Minutes/Minutes';
 
+export interface TimePickerOptions {
+  useSeconds?: boolean
+  useMillis?: boolean
+}
+
 export interface TimePickerProps extends UseDatetime {
-  initial?: DateTime
+
 }
 
 const TimePicker = ({ datetime = DateTime.now(), setDatetime, onSet }: TimePickerProps) => {

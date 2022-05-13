@@ -14,7 +14,7 @@ const Calendar = ({ datetime = DateTime.now(), setDatetime, onSet }: CalendarPro
   }
 
   return (
-    <Table celled>
+    <Table celled className='unstackable'>
       <Table.Header>
         <Table.Row>
           {sundayFirstWeekdays('short').map(d => <Table.HeaderCell key={d} content={d} />)}
