@@ -8,7 +8,6 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
     "@storybook/preset-scss",
-    // "storybook-addon-sass-postcss"
   ],
   "core": {
     "builder": "webpack5"

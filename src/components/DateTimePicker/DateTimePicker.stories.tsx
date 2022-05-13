@@ -5,7 +5,7 @@ import DateTimePicker from './DateTimePicker';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'ReactComponentLibrary/DateTimePicker',
+  title: 'Date Time Library/DateTimePicker',
   component: DateTimePicker,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
@@ -16,25 +16,22 @@ export default {
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const Template: ComponentStory<typeof DateTimePicker> = (args) => <DateTimePicker {...args} />;
 
-export const Primary = Template.bind({});
+export const DateAndTimePicker = Template.bind({});
+DateAndTimePicker.args = {
+  selectDate: true,
+  selectTime: true
+};
+
+export const DatePickerOnly = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Primary.args = {
-  // initial: 4738289
+DatePickerOnly.args = {
+  selectTime: false,
+  selectDate: true
 };
 
-export const Secondary = Template.bind({});
-Secondary.args = {
-  // label: 'Hello Austin',
+export const TimePickerOnly = Template.bind({});
+TimePickerOnly.args = {
+  selectTime: true,
+  selectDate: false,
 };
 
-export const Large = Template.bind({});
-Large.args = {
-  // size: 'large',
-  // label: 'DateTimePicker',
-};
-
-export const Small = Template.bind({});
-Small.args = {
-  // size: 'small',
-  // label: 'DateTimePicker',
-};
