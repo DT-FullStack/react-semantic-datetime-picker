@@ -1,12 +1,16 @@
 import { DateObjectUnits, DateTime, Info, InfoUnitOptions, StringUnitLength } from 'luxon'
 import _ from 'lodash';
 import 'semantic-ui-css/semantic.min.css'
+// import './keyframes.css'
 import './shared.sass'
 
 export interface UseDatetime {
   datetime?: DateTime
   setDatetime?: (dt: DateTime) => any
   onSet?: () => void
+}
+export interface OnClickOut {
+  onClickOut: () => void
 }
 
 export { default as DateTimePicker } from './DateTimePicker'

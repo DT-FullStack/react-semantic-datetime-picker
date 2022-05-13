@@ -23,9 +23,9 @@ const TimePicker = ({ datetime = DateTime.now(), setDatetime, onSet }: TimePicke
       <span className='clickable compact' onClick={() => setShowingMinutes(true)}>{datetime.toFormat('mm')}</span>
       <span className='clickable' onClick={() => setShowingHours(true)}>{datetime.toFormat('a')}</span>
       {showingHours &&
-        <Hours datetime={datetime} setDatetime={setDatetime} onSet={() => setShowingHours(false)} />}
+        <Hours datetime={datetime} setDatetime={setDatetime} onSet={() => setShowingHours(false)} onClickOut={() => setShowingHours(false)} />}
       {showingMinutes &&
-        <Minutes datetime={datetime} setDatetime={setDatetime} onSet={() => setShowingMinutes(false)} />}
+        <Minutes datetime={datetime} setDatetime={setDatetime} onSet={() => setShowingMinutes(false)} onClickOut={() => setShowingMinutes(false)} />}
     </div>
   )
 }

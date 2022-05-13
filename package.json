@@ -1,6 +1,6 @@
 {
   "name": "@codewizard-dt/react-semantic-datetime-picker",
-  "version": "0.0.12",
+  "version": "0.0.15",
   "description": "A datetime picker library for React and Semantic UI",
   "scripts": {
     "test": "jest",
@@ -53,6 +53,7 @@
     "jest": "^28.1.0",
     "jest-environment-jsdom": "^28.1.0",
     "postcss": "^8.4.13",
+    "postcss-node-sass": "^3.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "rollup": "^2.72.1",

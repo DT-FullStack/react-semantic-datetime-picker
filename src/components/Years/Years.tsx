@@ -33,7 +33,7 @@ const Years = ({ datetime = DateTime.now(), setDatetime, onSet }: YearsProps) =>
         <Menu.Item icon onClick={() => setPast(past + 24)} content={<Icon name='angle double left' />} />
         <Menu.Item icon onClick={() => setPast(past + 4)} content={<Icon name='angle left' />} />
         {/* @ts-ignore */}
-        <Header>{datetime.year}</Header>
+        <Header className="half-opacity" >{years[0]} - {years[years.length - 1]}</Header>
         <Menu.Item icon onClick={() => setFuture(future + 4)} content={<Icon name='angle right' />} />
         <Menu.Item icon onClick={() => setFuture(future + 24)} content={<Icon name='angle double right' />} />
       </Menu>
