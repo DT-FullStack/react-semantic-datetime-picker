@@ -1,13 +1,26 @@
-import React from 'react'
-import './DateTimePicker.css'
 
-interface DateTimePickerProps {
 
+import React, { useState } from 'react'
+import { DateTime } from 'luxon'
+import './DateTimePicker.sass'
+import DatePicker from '../DatePicker/DatePicker'
+import TimePicker from '../TimePicker/TimePicker'
+
+export interface DateTimePickerProps {
+  initial?: DateTime
+  selectDate?: boolean
+  selectTime?: boolean
 }
 
-const DateTimePicker = (props: DateTimePickerProps) => {
+const DateTimePicker = ({ initial, selectDate = true, selectTime = true }: DateTimePickerProps) => {
+  const [datetime, setDatetime] = useState(initial || DateTime.now())
   return (
-    <div>DateTimePicker</div>
+    <div className='datetimepicker'>
+      {selectDate &&
+        <DatePicker datetime={datetime} setDatetime={setDatetime} />}
+      {selectTime &&
+        <TimePicker datetime={datetime} setDatetime={setDatetime} />}
+    </div>
   )
 }
 

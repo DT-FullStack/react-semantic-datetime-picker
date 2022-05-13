@@ -1,0 +1,26 @@
+.datepicker.container
+  position: relative
+  .picker
+    position: absolute
+    top: 0
+    width: auto
+    .header
+      margin: 0
+      flex-grow: 1
+      text-align: center
+      align-self: center
+    th, td
+      width: 2.8em
+      padding: 0.5em 0.25em
+      text-align: center
+    td
+      cursor: pointer
+      transition: background-color 400ms, opacity 400ms
+      &:hover
+        background-color: rgb(240,240,240)
+        opacity: 1 !important
+      &.otherMonth
+        opacity: 0.6
+      &.active
+        background-color: #2185d0 !important
+        color: white !important

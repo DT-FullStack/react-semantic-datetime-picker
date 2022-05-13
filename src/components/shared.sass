@@ -1,0 +1,45 @@
+%selectable
+  padding: 0.25rem 0.5rem
+  color: black
+  text-align: center
+  cursor: pointer
+  &:hover
+    background-color: rgb(240,240,240)
+    opacity: 1 !important
+  &.otherMonth
+    opacity: 0.6
+  &.active
+    background-color: #2185d0 !important
+    color: white !important
+
+
+.datetimepicker
+  .clickable
+    text-decoration: underline rgba(90,90,90,0.3)
+    text-decoration-style: dotted
+    text-underline-offset: 3px
+    transition: text-decoration-color 400ms
+    cursor: pointer
+    &:hover
+      text-decoration-color: rgba(90,90,90,1)
+    + .clickable:not(.compact)
+      margin-left: 0.5rem
+  .ui.cards
+    width:100%
+    max-width: 20em
+    align-items: center
+    margin: 0
+    .card
+      @extend %selectable        
+    &.compact.four
+      .card
+        width: calc(25% - 0.5em)
+        margin: 0.25em
+  .ui.list
+    width: 100%
+    max-width: 20em
+    &.scrolling
+      max-height: 12em
+      overflow: hidden scroll
+    .item
+      @extend %selectable
