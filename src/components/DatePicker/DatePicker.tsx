@@ -26,7 +26,7 @@ const DatePicker = ({ datetime = DateTime.now(), setDatetime, onSet }: DatePicke
         {datetime.toLocaleString()}
       </div>
       {showingPicker &&
-        <Date datetime={datetime} setDatetime={setDatetime} onSet={onSet} onClickOut={hidePicker} />
+        <Date datetime={datetime} setDatetime={setDatetime} onClickOut={hidePicker} />
       }
 
     </div>

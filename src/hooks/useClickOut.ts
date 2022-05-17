@@ -1,27 +1,26 @@
 import { useEffect, useRef } from "react";
 
-export interface ClickOutOptions {
-  ref?: React.RefObject<HTMLElement>
-  onClickOut: () => void
-}
+const useClickOut = (ref: React.RefObject<HTMLElement>, onClickOut: () => void): void => {
+  const isInDocument = (element: any) => document.contains(element)
+  const isInRef = (element: any) => ref.current?.contains(element)
 
-const useClickOut = ({ ref, onClickOut }: ClickOutOptions): React.RefObject<HTMLElement> => {
-  if (!ref) ref = useRef<HTMLElement>(null);
+  const onClickOutside = (e: MouseEvent) => {
+    const element = e.target;
+    if (ref.current !== null && isInDocument(element) && !isInRef(element)) {
+      e.preventDefault();
+      e.stopPropagation();
+      onClickOut();
+    }
+  };
+  const addListener = () => document.addEventListener('click', onClickOutside)
+  const removeListener = () => document.removeEventListener('click', onClickOutside);
 
   useEffect(() => {
-    const onClickOutside = (e: MouseEvent) => {
-      const element = e.target;
-      if (ref && ref.current && !ref.current.contains(element as Node)) {
-        e.preventDefault();
-        e.stopPropagation();
-        onClickOut();
-      }
-    };
-    document.addEventListener('click', onClickOutside)
-    return () => document.removeEventListener('click', onClickOutside);
-  }, [ref, onClickOut])
+    if (ref.current) addListener();
+    return removeListener;
+  }, [ref])
 
-  return ref;
+  // return ref;
 }
 
 export default useClickOut

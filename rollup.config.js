@@ -4,6 +4,10 @@ import typescript from '@rollup/plugin-typescript'
 import postcss from "rollup-plugin-postcss";
 import dts from 'rollup-plugin-dts'
 
+import postcssImport from "postcss-import";
+import postcssNested from "postcss-nested";
+import autoprefixer from "autoprefixer";
+
 const packageJson = require("./package.json");
 
 export default [
@@ -27,14 +31,16 @@ export default [
       'lodash',
       'luxon',
       'semantic-ui-css',
-      'semantic-ui-react'
+      'semantic-ui-react',
     ],
     plugins: [
       resolve(),
       commonjs(),
       typescript({ tsconfig: "./tsconfig.json" }),
       postcss({
-        extract: true
+        plugins: [postcssImport(), postcssNested(), autoprefixer()],
+        extract: 'datepicker.css',
+        sourceMap: true
       }),
     ],
   },

@@ -1,12 +1,17 @@
 {
   "name": "@codewizard-dt/react-semantic-datetime-picker",
-  "version": "0.0.15",
+  "version": "0.0.32",
   "description": "A datetime picker library for React and Semantic UI",
   "scripts": {
     "test": "jest",
     "rollup": "rollup -c",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "rm-semantic-import": "replace-in-files --string=\"import 'semantic-ui-css/semantic.min.css'\" --replacement=\"// import 'semantic-ui-css/semantic.min.css'\" ./src/components/index.ts",
+    "replace-semantic-import": "replace-in-files --string=\"// import 'semantic-ui-css/semantic.min.css'\" --replacement=\"import 'semantic-ui-css/semantic.min.css'\" ./src/components/index.ts",
+    "increment-pkg-version": "",
+    "prepublishOnly": "npm run rm-semantic-import && npm run rollup && mv dist/cjs/index/datepicker.css datepicker.css",
+    "postpack": "npm run replace-semantic-import"
   },
   "keywords": [
     "react",
@@ -45,6 +50,7 @@
     "@testing-library/react": "^12.1.5",
     "@types/jest": "^27.5.1",
     "@types/react": "^18.0.9",
+    "autoprefixer": "^10.4.7",
     "babel-jest": "^28.1.0",
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
@@ -53,6 +59,8 @@
     "jest": "^28.1.0",
     "jest-environment-jsdom": "^28.1.0",
     "postcss": "^8.4.13",
+    "postcss-import": "^14.1.0",
+    "postcss-nested": "^5.0.6",
     "postcss-node-sass": "^3.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -77,10 +85,16 @@
   "main": "dist/cjs/index/js",
   "module": "dist/esm/index.js",
   "files": [
-    "dist"
+    "dist",
+    "**/datepicker.css"
   ],
   "types": "dist/index.d.ts",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/codewizard-dt"
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/codewizard-dt/react-semantic-datetime-picker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/codewizard-dt/react-semantic-datetime-picker/issues"
+  },
+  "homepage": "https://github.com/codewizard-dt/react-semantic-datetime-picker#readme"
 }

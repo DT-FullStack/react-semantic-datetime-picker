@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Card, Header, Icon, Menu, Ref } from 'semantic-ui-react';
 import useClickOut from '../../hooks/useClickOut';
 import Calendar from '../Calendar/Calendar';
@@ -18,7 +18,8 @@ const Date = ({ datetime = DateTime.now(), setDatetime, onSet, onClickOut }: Dat
   const prevMonth = () => setDatetime ? setDatetime(datetime.minus({ month: 1 })) : null
   const nextMonth = () => setDatetime ? setDatetime(datetime.plus({ month: 1 })) : null
 
-  const clickRef = useClickOut({ onClickOut })
+  const clickRef = useRef<HTMLElement>(null);
+  useClickOut(clickRef, onClickOut)
 
   return (
     <Ref innerRef={clickRef}>
@@ -35,7 +36,7 @@ const Date = ({ datetime = DateTime.now(), setDatetime, onSet, onClickOut }: Dat
           {!showingMonths && !showingYears &&
             <Calendar datetime={datetime} setDatetime={setDatetime} onSet={onClickOut} />}
           {showingMonths &&
-            <Months datetime={datetime} setDatetime={setDatetime} onSet={() => setShowingMonths(false)} />}
+            <Months datetime={datetime} setDatetime={setDatetime} onSet={() => { setShowingMonths(false) }} />}
           {showingYears &&
             <Years datetime={datetime} setDatetime={setDatetime} onSet={() => setShowingYears(false)} />}
         </Card.Content>
