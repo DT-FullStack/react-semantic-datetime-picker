@@ -1,6 +1,6 @@
 {
-  "name": "@codewizard-dt/react-semantic-datetime-picker",
-  "version": "0.0.32",
+  "name": "@codewizard-dt/datetime-picker",
+  "version": "0.0.1",
   "description": "A datetime picker library for React and Semantic UI",
   "scripts": {
     "test": "jest",
@@ -21,7 +21,7 @@
     "time"
   ],
   "author": "David Taylor",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@types/lodash": "^4.14.182",
     "@types/luxon": "^2.3.2",
