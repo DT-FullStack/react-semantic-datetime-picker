@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 const useClickOut = (ref: React.RefObject<HTMLElement>, onClickOut: () => void): void => {
   const isInDocument = (element: any) => document.contains(element)
@@ -19,8 +19,6 @@ const useClickOut = (ref: React.RefObject<HTMLElement>, onClickOut: () => void):
     if (ref.current) addListener();
     return removeListener;
   }, [ref])
-
-  // return ref;
 }
 
 export default useClickOut

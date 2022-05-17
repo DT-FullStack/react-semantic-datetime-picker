@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 import React, { useRef, useState } from 'react'
 import { Card, Header, Icon, Menu, Ref } from 'semantic-ui-react';
 import useClickOut from '../../hooks/useClickOut';
+import useKeepOnScreen from '../../hooks/useKeepOnScreen';
 import Calendar from '../Calendar/Calendar';
 import { UseDatetime, OnClickOut } from '../index';
 import Months from '../Months/Months';
@@ -18,11 +19,12 @@ const Date = ({ datetime = DateTime.now(), setDatetime, onSet, onClickOut }: Dat
   const prevMonth = () => setDatetime ? setDatetime(datetime.minus({ month: 1 })) : null
   const nextMonth = () => setDatetime ? setDatetime(datetime.plus({ month: 1 })) : null
 
-  const clickRef = useRef<HTMLElement>(null);
-  useClickOut(clickRef, onClickOut)
+  const ref = useRef<HTMLElement>(null);
+  useClickOut(ref, onClickOut)
+  useKeepOnScreen(ref)
 
   return (
-    <Ref innerRef={clickRef}>
+    <Ref innerRef={ref}>
       <Card className="picker">
         <Card.Content>
           <Menu secondary>
