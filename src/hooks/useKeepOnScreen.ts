@@ -4,22 +4,22 @@ const useKeepOnScreen = (ref: React.RefObject<HTMLElement>) => {
   const body = document.querySelector('body')
   if (!body) return
   const viewBox = body.getBoundingClientRect()
-  const isAbove = (ele: DOMRect): boolean => ele.top < 5
-  const isBelow = (ele: DOMRect): boolean => viewBox.bottom - ele.bottom < 5
-  const isToLeft = (ele: DOMRect): boolean => ele.left < 5
-  const isToRight = (ele: DOMRect): boolean => viewBox.right - ele.right < 5
+  const isAbove = (ele: DOMRect): boolean => ele.top < 0
+  const isBelow = (ele: DOMRect): boolean => ele.bottom > viewBox.bottom
+  const isToLeft = (ele: DOMRect): boolean => ele.left < 0
+  const isToRight = (ele: DOMRect): boolean => ele.right > viewBox.right
 
   useEffect(() => {
     if (ref.current) {
       const refBox = ref.current.getBoundingClientRect()
-      console.log({ viewBox, refBox })
-      if (isAbove(refBox)) ref.current.classList.add('top-guard')
-      if (isBelow(refBox)) ref.current.classList.add('bottom-guard')
-      if (isToLeft(refBox)) ref.current.classList.add('left-guard')
-      if (isToRight(refBox)) ref.current.classList.add('right-guard')
+      console.log({ viewBox: viewBox.right, refBox: refBox.right })
+      if (isAbove(refBox)) { console.log('top'); ref.current.classList.add('top-guard') }
+      else if (isBelow(refBox)) { console.log('bottom'); ref.current.classList.add('bottom-guard') }
+      else if (isToLeft(refBox)) { console.log('left'); ref.current.classList.add('left-guard') }
+      else if (isToRight(refBox)) { console.log('right'); ref.current.classList.add('right-guard') }
 
     }
-  }, [ref.current])
+  }, [ref])
 }
 
 export default useKeepOnScreen

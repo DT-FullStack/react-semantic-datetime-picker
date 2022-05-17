@@ -11,12 +11,13 @@ export interface DateTimePickerProps {
   selectDate?: boolean
   selectTime?: boolean
   name?: string
+  className?: string
 }
 
-const DateTimePicker = ({ initial, selectDate = true, selectTime = true, name = 'datetime' }: DateTimePickerProps) => {
+const DateTimePicker = ({ initial, selectDate = true, selectTime = true, name = 'datetime', className }: DateTimePickerProps) => {
   const [datetime, setDatetime] = useState(initial || DateTime.now())
   return (
-    <div className='datetimepicker'>
+    <div className={'datetimepicker ' + className}>
       <input hidden name={name} value={datetime.toMillis()} readOnly />
       <input hidden name={name + '-date-only'} value={datetime.toISODate()} readOnly />
       <input hidden name={name + '-time-only'} value={datetime.toISOTime()} readOnly />

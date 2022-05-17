@@ -16,8 +16,9 @@ export default {
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const Template: ComponentStory<typeof DateTimePicker> = (args) => <DateTimePicker {...args} />;
 
-export const DateAndTimePicker = Template.bind({});
-DateAndTimePicker.args = {
+export const RightAlign = Template.bind({});
+RightAlign.args = {
+  className: 'right',
   selectDate: true,
   selectTime: true
 };

@@ -1,6 +1,6 @@
 {
   "name": "@codewizard-dt/datetime-picker",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "A datetime picker library for React and Semantic UI",
   "scripts": {
     "test": "jest",

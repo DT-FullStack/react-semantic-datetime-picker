@@ -70,9 +70,26 @@
 }
 .datetimepicker .ui.list .item {
   background-color: white;
+  padding: 0.25rem 1.5rem;
 }
 .half-opacity {
   opacity: 0.5;
+}
+.top-guard {
+  top: 0 !important;
+  bottom: unset !important;
+}
+.bottom-guard {
+  top: unset !important;
+  bottom: 0 !important;
+}
+.left-guard {
+  left: 0 !important;
+  right: unset !important;
+}
+.right-guard {
+  left: unset !important;
+  right: 0 !important;
 }
 @media only screen and (max-width: 320px) {
   .picker {
@@ -105,7 +122,10 @@
     opacity: 1;
   }
 }
-
+.datetimepicker.right {
+  position: absolute;
+  right: 0;
+}
 .datepicker.container {
   position: relative;
 }
