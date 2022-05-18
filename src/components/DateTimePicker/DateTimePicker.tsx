@@ -2,9 +2,13 @@
 
 import React, { useState } from 'react'
 import { DateTime } from 'luxon'
-import './DateTimePicker.sass'
+// import './DateTimePicker.sass'
 import DatePicker from '../DatePicker/DatePicker'
 import TimePicker from '../TimePicker/TimePicker'
+import 'semantic-ui-css/semantic.min.css'
+import '../shared.sass'
+
+
 
 export interface DateTimePickerProps {
   initial?: DateTime
@@ -15,7 +19,7 @@ export interface DateTimePickerProps {
   className?: string
 }
 
-const DateTimePicker = ({ initial, selectDate = true, selectTime = true, name = 'datetime', align, className = '' }: DateTimePickerProps) => {
+const DateTimePicker = ({ initial, selectDate = true, selectTime = true, name = 'datetime', align = 'center', className = '' }: DateTimePickerProps) => {
   const [datetime, setDatetime] = useState(initial || DateTime.now())
   const classes = () => ['datetimepicker', align, ...className.split(' ')].join(' ')
   return (

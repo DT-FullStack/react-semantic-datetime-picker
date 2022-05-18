@@ -1,6 +1,6 @@
 {
   "name": "@codewizard-dt/datetime-picker",
-  "version": "0.0.8",
+  "version": "0.0.13",
   "description": "A datetime picker library for React and Semantic UI",
   "scripts": {
     "test": "jest",
@@ -9,7 +9,6 @@
     "build-storybook": "build-storybook",
     "rm-semantic-import": "replace-in-files --string=\"import 'semantic-ui-css/semantic.min.css'\" --replacement=\"// import 'semantic-ui-css/semantic.min.css'\" ./src/components/index.ts",
     "replace-semantic-import": "replace-in-files --string=\"// import 'semantic-ui-css/semantic.min.css'\" --replacement=\"import 'semantic-ui-css/semantic.min.css'\" ./src/components/index.ts",
-    "increment-pkg-version": "",
     "prepublishOnly": "npm run rm-semantic-import && npm run rollup && mv dist/cjs/index/datepicker.css datepicker.css",
     "postpack": "npm run replace-semantic-import"
   },
