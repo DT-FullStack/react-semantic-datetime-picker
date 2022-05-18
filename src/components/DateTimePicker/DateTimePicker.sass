@@ -1,4 +1,15 @@
 .datetimepicker
   &.right
-    position: absolute
-    right: 0
+    text-align: right
+    .picker
+      right: 0
+  &.center
+    text-align: center
+    .picker
+      left: 50%
+      transform: translateX(-50%)
+      // transform
+  &.left
+    text-align: left
+    .picker
+      left: 0

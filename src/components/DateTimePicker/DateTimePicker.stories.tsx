@@ -18,21 +18,23 @@ const Template: ComponentStory<typeof DateTimePicker> = (args) => <DateTimePicke
 
 export const RightAlign = Template.bind({});
 RightAlign.args = {
-  className: 'right',
-  selectDate: true,
-  selectTime: true
+  align: 'right',
+  // selectDate: true,
+  // selectTime: true
 };
 
-export const DatePickerOnly = Template.bind({});
+export const LeftAlign = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-DatePickerOnly.args = {
-  selectTime: false,
-  selectDate: true
+LeftAlign.args = {
+  align: 'left',
+  // selectTime: false,
+  // selectDate: true
 };
 
-export const TimePickerOnly = Template.bind({});
-TimePickerOnly.args = {
-  selectTime: true,
-  selectDate: false,
+export const CenterAlign = Template.bind({});
+CenterAlign.args = {
+  align: 'center',
+  // selectTime: true,
+  // selectDate: false,
 };
 
