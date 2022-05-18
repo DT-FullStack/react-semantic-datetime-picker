@@ -17,7 +17,6 @@
 }
 .datetimepicker {
   font-size: 1.2rem;
-  display: inline-block;
   text-align: center;
 }
 .datetimepicker .picker, .datetimepicker .picker.ui.list, .datetimepicker .picker.ui.card {
@@ -123,8 +122,23 @@
   }
 }
 .datetimepicker.right {
-  position: absolute;
+  text-align: right;
+}
+.datetimepicker.right .picker {
   right: 0;
+}
+.datetimepicker.center {
+  text-align: center;
+}
+.datetimepicker.center .picker {
+  left: 50%;
+  transform: translateX(-50%);
+}
+.datetimepicker.left {
+  text-align: left;
+}
+.datetimepicker.left .picker {
+  left: 0;
 }
 .datepicker.container {
   position: relative;
