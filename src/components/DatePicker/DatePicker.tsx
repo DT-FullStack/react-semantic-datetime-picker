@@ -6,7 +6,7 @@ import _ from 'lodash'
 import Calendar from '../Calendar/Calendar';
 import Months from '../Months/Months';
 import Years from '../Years/Years';
-import { OnClickOut, UseDatetime } from '../index';
+import { OnClickOut, UseDatetime } from '../../util/DatetimeHelpers';
 import useClickOut from '../../hooks/useClickOut';
 import Date from '../Date/Date';
 

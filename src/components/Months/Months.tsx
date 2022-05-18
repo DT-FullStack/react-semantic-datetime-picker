@@ -1,7 +1,7 @@
 import { DateObjectUnits, DateTime, Info } from 'luxon';
 import React from 'react'
 import { Card } from 'semantic-ui-react';
-import { UseDatetime } from '../index';
+import { UseDatetime } from '../../util/DatetimeHelpers';
 
 interface MonthsProps extends UseDatetime {
 

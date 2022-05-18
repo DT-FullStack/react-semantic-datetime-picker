@@ -1,7 +1,7 @@
 import { DateObjectUnits, DateTime, Info } from 'luxon';
 import React, { useEffect, useState } from 'react'
 import { Card, Header, Icon, Menu } from 'semantic-ui-react';
-import { UseDatetime } from '../index';
+import { UseDatetime } from '../../util/DatetimeHelpers';
 
 interface YearsProps extends UseDatetime {
 

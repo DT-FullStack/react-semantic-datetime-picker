@@ -4,7 +4,7 @@ import { Card, Header, Icon, Menu, Ref } from 'semantic-ui-react';
 import useClickOut from '../../hooks/useClickOut';
 import useKeepOnScreen from '../../hooks/useKeepOnScreen';
 import Calendar from '../Calendar/Calendar';
-import { UseDatetime, OnClickOut } from '../index';
+import { UseDatetime, OnClickOut } from '../../util/DatetimeHelpers';
 import Months from '../Months/Months';
 import Years from '../Years/Years';
 
