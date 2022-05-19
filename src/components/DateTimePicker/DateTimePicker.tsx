@@ -3,8 +3,8 @@
 import React, { useState } from 'react'
 import { DateTime } from 'luxon'
 // import './DateTimePicker.sass'
-import DatePicker from '../DatePicker/DatePicker'
-import TimePicker from '../TimePicker/TimePicker'
+import DatePicker from './DatePicker/DatePicker'
+import TimePicker from './TimePicker/TimePicker'
 import 'semantic-ui-css/semantic.min.css'
 import '../shared.sass'
 

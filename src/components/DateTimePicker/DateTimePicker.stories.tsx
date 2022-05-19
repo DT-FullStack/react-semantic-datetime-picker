@@ -2,6 +2,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import DateTimePicker from './DateTimePicker';
+import { Card, CardContent, CardGroup } from 'semantic-ui-react';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -19,22 +20,37 @@ const Template: ComponentStory<typeof DateTimePicker> = (args) => <DateTimePicke
 export const RightAlign = Template.bind({});
 RightAlign.args = {
   align: 'right',
-  // selectDate: true,
-  // selectTime: true
 };
+export const InCardGroup: ComponentStory<typeof DateTimePicker> = (args) =>
+  <div style={{ height: '3000px' }}>
+    <CardGroup className='three' >
+      <Card content={<DateTimePicker {...args} />} />
+      <Card content={<DateTimePicker {...args} />} />
+      <Card content={<DateTimePicker {...args} />} />
+    </CardGroup>
+
+  </div>
+
+export const InCardContent: ComponentStory<typeof DateTimePicker> = (args) =>
+  <div style={{ height: '3000px' }}>
+    <CardGroup className='three' >
+      <Card content={<CardContent content={<DateTimePicker {...args} />} />} />
+      <Card content={<CardContent content={<DateTimePicker {...args} />} />} />
+      <Card content={<CardContent content={<DateTimePicker {...args} />} />} />
+    </CardGroup>
+
+  </div>
+
+
 
 export const LeftAlign = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 LeftAlign.args = {
   align: 'left',
-  // selectTime: false,
-  // selectDate: true
 };
 
 export const CenterAlign = Template.bind({});
 CenterAlign.args = {
   align: 'center',
-  // selectTime: true,
-  // selectDate: false,
 };
 

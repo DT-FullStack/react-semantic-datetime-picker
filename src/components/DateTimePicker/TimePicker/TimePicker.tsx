@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon';
 import React, { useState } from 'react'
-import Hours from '../Hours/Hours';
-import { UseDatetime } from '../../util/DatetimeHelpers';
-import Minutes from '../Minutes/Minutes';
+import Hours from './Hours/Hours';
+import { UseDatetime } from '@util/DatetimeHelpers';
+import Minutes from './Minutes/Minutes';
 
 export interface TimePickerOptions {
   useSeconds?: boolean

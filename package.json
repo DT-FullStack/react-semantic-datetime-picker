@@ -1,14 +1,14 @@
 {
   "name": "@codewizard-dt/datetime-picker",
-  "version": "0.0.13",
+  "version": "0.0.16",
   "description": "A datetime picker library for React and Semantic UI",
   "scripts": {
     "test": "jest",
     "rollup": "rollup -c",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "rm-semantic-import": "replace-in-files --string=\"import 'semantic-ui-css/semantic.min.css'\" --replacement=\"// import 'semantic-ui-css/semantic.min.css'\" ./src/components/index.ts",
-    "replace-semantic-import": "replace-in-files --string=\"// import 'semantic-ui-css/semantic.min.css'\" --replacement=\"import 'semantic-ui-css/semantic.min.css'\" ./src/components/index.ts",
+    "rm-semantic-import": "replace-in-files --string=\"import 'semantic-ui-css/semantic.min.css'\" --replacement=\"// import 'semantic-ui-css/semantic.min.css'\" ./src/components/DateTimePicker/DateTimePicker.tsx",
+    "replace-semantic-import": "replace-in-files --string=\"// import 'semantic-ui-css/semantic.min.css'\" --replacement=\"import 'semantic-ui-css/semantic.min.css'\" ./src/components/DateTimePicker/DateTimePicker.tsx",
     "prepublishOnly": "npm run rm-semantic-import && npm run rollup && mv dist/cjs/index/datepicker.css datepicker.css",
     "postpack": "npm run replace-semantic-import"
   },
@@ -69,6 +69,7 @@
     "sass": "^1.51.0",
     "sass-loader": "^12.6.0",
     "style-loader": "^3.3.1",
+    "tsconfig-paths-webpack-plugin": "^3.5.2",
     "tslib": "^2.4.0",
     "typescript": "^4.6.4",
     "webpack": "^5.72.1"

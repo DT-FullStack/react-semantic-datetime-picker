@@ -1,12 +1,13 @@
 import { DateTime } from 'luxon';
 import React, { useRef, useState } from 'react'
 import { Card, Header, Icon, Menu, Ref } from 'semantic-ui-react';
-import useClickOut from '../../hooks/useClickOut';
-import useKeepOnScreen from '../../hooks/useKeepOnScreen';
+import useClickOut from '@hooks/useClickOut';
+import useKeepOnScreen from '@hooks/useKeepOnScreen';
 import Calendar from '../Calendar/Calendar';
-import { UseDatetime, OnClickOut } from '../../util/DatetimeHelpers';
+import { UseDatetime, OnClickOut } from '@util/DatetimeHelpers';
 import Months from '../Months/Months';
 import Years from '../Years/Years';
+import PopUp from '@util/PopUp';
 
 interface DateProps extends UseDatetime, OnClickOut {
 
@@ -19,12 +20,12 @@ const Date = ({ datetime = DateTime.now(), setDatetime, onSet, onClickOut }: Dat
   const prevMonth = () => setDatetime ? setDatetime(datetime.minus({ month: 1 })) : null
   const nextMonth = () => setDatetime ? setDatetime(datetime.plus({ month: 1 })) : null
 
-  const ref = useRef<HTMLElement>(null);
-  useClickOut(ref, onClickOut)
-  useKeepOnScreen(ref)
+  // const ref = useRef<HTMLElement>(null);
+  // useClickOut(ref, onClickOut)
+  // useKeepOnScreen(ref)
 
   return (
-    <Ref innerRef={ref}>
+    <PopUp onClickOut={onClickOut}>
       <Card className="picker">
         <Card.Content>
           <Menu secondary>
@@ -43,7 +44,7 @@ const Date = ({ datetime = DateTime.now(), setDatetime, onSet, onClickOut }: Dat
             <Years datetime={datetime} setDatetime={setDatetime} onSet={() => setShowingYears(false)} />}
         </Card.Content>
       </Card>
-    </Ref>
+    </PopUp>
   )
 }
 

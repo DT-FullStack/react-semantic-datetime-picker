@@ -40,7 +40,6 @@ export default [
       postcss({
         plugins: [postcssImport(), postcssNested(), autoprefixer()],
         extract: 'datepicker.css',
-        sourceMap: true
       }),
     ],
   },

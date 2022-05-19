@@ -1,10 +1,9 @@
 import { DateObjectUnits, DateTime, Info } from 'luxon';
 import React, { useEffect } from 'react'
 import { Button, Card, List, Ref } from 'semantic-ui-react';
-import useClickOut from '../../hooks/useClickOut';
-import useScrollToActive from '../../hooks/useScrollToActive';
-import { OnClickOut, UseDatetime } from '../../util/DatetimeHelpers';
-// import './Minutes.sass'
+import useClickOut from '@hooks/useClickOut';
+import useScrollToActive from '@hooks/useScrollToActive';
+import { OnClickOut, UseDatetime } from '@util/DatetimeHelpers';
 
 interface MinutesProps extends UseDatetime, OnClickOut {
 

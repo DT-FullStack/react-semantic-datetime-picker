@@ -1,7 +1,7 @@
 import { DateObjectUnits, DateTime } from 'luxon'
 import React from 'react'
 import { Table } from 'semantic-ui-react'
-import { calDaysChunks, sundayFirstWeekdays, UseDatetime } from '../../util/DatetimeHelpers';
+import { calDaysChunks, sundayFirstWeekdays, UseDatetime } from '../../../../util/DatetimeHelpers';
 
 interface CalendarProps extends UseDatetime {
 

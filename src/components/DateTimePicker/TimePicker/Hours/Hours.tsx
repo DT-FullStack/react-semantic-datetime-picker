@@ -1,10 +1,10 @@
 import { DateObjectUnits, DateTime, Info } from 'luxon';
 import React, { useEffect, useRef } from 'react'
 import { Card, List, Ref } from 'semantic-ui-react';
-import useClickOut from '../../hooks/useClickOut';
-import useKeepOnScreen from '../../hooks/useKeepOnScreen';
-import useScrollToActive from '../../hooks/useScrollToActive';
-import { OnClickOut, UseDatetime } from '../../util/DatetimeHelpers';
+import useClickOut from '@hooks/useClickOut';
+import useKeepOnScreen from '@hooks/useKeepOnScreen';
+import useScrollToActive from '@hooks/useScrollToActive';
+import { OnClickOut, UseDatetime } from '@util/DatetimeHelpers';
 // import './Hours.sass'
 
 interface HoursProps extends UseDatetime, OnClickOut {
