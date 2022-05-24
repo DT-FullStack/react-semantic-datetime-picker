@@ -3,6 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import DateTimePicker from './DateTimePicker';
 import { Card, CardContent, CardGroup } from 'semantic-ui-react';
+import { DateTime } from 'luxon';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -22,31 +23,48 @@ RightAlign.args = {
   align: 'right',
 };
 export const InCardGroup: ComponentStory<typeof DateTimePicker> = (args) =>
-  <div style={{ height: '3000px' }}>
-    <CardGroup className='three' >
-      <Card content={<DateTimePicker {...args} />} />
-      <Card content={<DateTimePicker {...args} />} />
-      <Card content={<DateTimePicker {...args} />} />
-    </CardGroup>
-
-  </div>
+  <CardGroup className='three'  >
+    <Card content={<DateTimePicker {...args} />} />
+    <Card content={<DateTimePicker {...args} />} />
+    <Card content={<DateTimePicker {...args} />} />
+  </CardGroup>
 
 export const InCardContent: ComponentStory<typeof DateTimePicker> = (args) =>
-  <div style={{ height: '3000px' }}>
-    <CardGroup className='three' >
-      <Card content={<CardContent content={<DateTimePicker {...args} />} />} />
-      <Card content={<CardContent content={<DateTimePicker {...args} />} />} />
-      <Card content={<CardContent content={<DateTimePicker {...args} />} />} />
-    </CardGroup>
-
-  </div>
+  <CardGroup className='three'  >
+    <Card content={<CardContent content={<DateTimePicker {...args} />} />} />
+    <Card content={<CardContent content={<DateTimePicker {...args} />} />} />
+    <Card content={<CardContent content={<DateTimePicker {...args} />} />} />
+  </CardGroup>
 
 
 
-export const LeftAlign = Template.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
-LeftAlign.args = {
-  align: 'left',
+export const IncludeDateTimeInstance = Template.bind({});
+IncludeDateTimeInstance.args = {
+  include: [DateTime.now(), DateTime.now().plus({ day: 1 }), DateTime.now().plus({ day: 4 })]
+};
+export const IncludeDateTimeObject = Template.bind({});
+IncludeDateTimeObject.args = {
+  include: [{ month: 5 }, { day: 6 }]
+};
+
+export const ExcludeDateTimeInstance = Template.bind({});
+ExcludeDateTimeInstance.args = {
+  exclude: [DateTime.now(), DateTime.now().plus({ day: 1 }), DateTime.now().plus({ day: 4 })]
+};
+export const ExcludeDateTimeObject = Template.bind({});
+ExcludeDateTimeObject.args = {
+  exclude: [{ month: 5 }, { day: 6 }]
+};
+export const ExcludeDateOfWeek = Template.bind({});
+ExcludeDateOfWeek.args = {
+  exclude: [{ weekday: 7 }]
+};
+
+
+export const WithRange = Template.bind({});
+WithRange.args = {
+  min: DateTime.fromObject({ year: 2020 }),
+  max: DateTime.fromObject({ month: 5 })
 };
 
 export const CenterAlign = Template.bind({});

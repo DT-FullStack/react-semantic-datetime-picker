@@ -1,4 +1,13 @@
+@use "sass:map"
+
 $pop2: cubic-bezier(0.76,0.07,0.6,1.47)
+
+$baseTranslate: ('X': 0, 'Y': 3px)
+@function getTranslate($x:0,$y:0) 
+  $newX: $x + map.get($baseTranslate,'X')
+  $newY: $y + map.get($baseTranslate,'Y')
+  @return translate($newX,$newY)
+
 
 .pop-up
   position: fixed
@@ -6,15 +15,18 @@ $pop2: cubic-bezier(0.76,0.07,0.6,1.47)
   z-index: 50
   animation: growIn 250ms $pop2, fadeIn 500ms ease-in
   margin: 0
-  border-radius: 3px
-  border: 1px solid rgba(90,90,90,0.5)
-  box-shadow: 0px 0px 5px rgba(120,120,120,0.5)
   max-width: calc(100vw - 2rem)
+  transform: getTranslate()
+  .ui.card
+    margin: 0
  
 .center
   .pop-up
-    transform: translateX(-50%)  
-.left
+    transform: getTranslate($x:-50%)  
+    animation: growInCentered 250ms $pop2, fadeIn 500ms ease-in
+.right
+  .pop-up
+    transform: getTranslate($x: -100%)
 
 .top-guard
   top: 1rem !important
@@ -24,31 +36,39 @@ $pop2: cubic-bezier(0.76,0.07,0.6,1.47)
   bottom: 1rem !important
 .left-guard
   left: 1rem !important
-  transform: unset !important
+  transform: getTranslate() !important
 .right-guard
   right: 1rem !important
   left: unset !important
-  transform: unset !important
+  transform: getTranslate() !important
 
 @media only screen and (max-width: 400px)
+  .center
+    .pop-up:not(.left-guard, .right-guard)
+      transform: getTranslate($x:-50%) !important
   .pop-up
     max-width: calc(100vw - 2rem) !important
-    left: 1rem
-    transform: unset !important
+    transform: getTranslate() !important
     .ui.table
       .sizer
         width: min-content !important
         margin: auto
         padding: 6px 2px !important
-        // width: unset !important
 
 @media only screen and (max-width: 320px)
   .pop-up
-    max-width: calc(100vw) !important
-    left: 0
+    max-width: calc(100vw - 6px) !important
     .ui.table
       .sizer
         width: unset !important
+  .left-guard
+    left: 3px !important
+    transform: getTranslate() !important
+  .right-guard
+    right: 3px !important
+    left: unset !important
+    transform: getTranslate() !important
+
 
 
 @keyframe growIn
@@ -58,9 +78,9 @@ $pop2: cubic-bezier(0.76,0.07,0.6,1.47)
     transform: scale(1)
 @keyframe growInCentered
   from
-    transform: scale(0), translateX(-50%)
+    transform: scale(0), getTranslate($x:-50%)
   to
-    transform: scale(1), translate(-50%)
+    transform: scale(1), getTranslate($x:-50%)
 @keyframes fadeIn
   from
     opacity: 0    

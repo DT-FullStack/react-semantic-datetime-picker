@@ -9,12 +9,13 @@ import Years from './Years/Years';
 import { OnClickOut, UseDatetime } from '@util/DatetimeHelpers';
 import useClickOut from '@hooks/useClickOut';
 import Date from './Date/Date';
+import { ConstraintOptions } from '../DateTimePicker';
 
-export interface DatePickerProps extends UseDatetime {
+export interface DatePickerProps extends UseDatetime, ConstraintOptions {
 
 }
 
-const DatePicker = ({ datetime = DateTime.now(), setDatetime, onSet }: DatePickerProps) => {
+const DatePicker = ({ datetime = DateTime.now(), setDatetime, onSet, ...constraintOptions }: DatePickerProps) => {
 
   const [showingPicker, setShowingPicker] = useState(false);
   const showPicker = () => setShowingPicker(true)
@@ -22,13 +23,14 @@ const DatePicker = ({ datetime = DateTime.now(), setDatetime, onSet }: DatePicke
 
   return (
     <div className='datepicker container'>
-      <div className="clickable" onClick={showPicker}>
-        {datetime.toLocaleString()}
+      <div>
+        <span className="clickable" onClick={showPicker}>
+          {datetime.toLocaleString()}
+        </span>
       </div>
       {showingPicker &&
-        <Date datetime={datetime} setDatetime={setDatetime} onClickOut={hidePicker} />
+        <Date {...constraintOptions} datetime={datetime} setDatetime={setDatetime} onClickOut={hidePicker} />
       }
-
     </div>
   )
 }
