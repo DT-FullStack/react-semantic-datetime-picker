@@ -2,7 +2,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import DateTimePicker from './DateTimePicker';
-import { Card, CardContent, CardGroup } from 'semantic-ui-react';
+import { Card, CardContent, CardGroup, Form, FormField, FormGroup, Input } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -36,6 +36,15 @@ export const InCardContent: ComponentStory<typeof DateTimePicker> = (args) =>
     <Card content={<CardContent content={<DateTimePicker {...args} />} />} />
   </CardGroup>
 
+export const InFormGroup: ComponentStory<typeof DateTimePicker> = (args) =>
+  <Form>
+    <Form.Group   >
+      <FormField inline type='text' control={Input} />
+      <DateTimePicker {...args} />
+      <FormField inline type='number' control={Input} />
+    </Form.Group>
+
+  </Form>
 
 
 export const IncludeDateTimeInstance = Template.bind({});
@@ -66,9 +75,27 @@ WithRange.args = {
   min: DateTime.fromObject({ year: 2020 }),
   max: DateTime.fromObject({ month: 5 })
 };
+export const Inline = Template.bind({});
+Inline.args = {
+  inline: true,
+};
+export const Label = Template.bind({});
+Label.args = {
+  label: 'Labeled',
+};
+export const InlineLabel = Template.bind({});
+InlineLabel.args = {
+  label: 'Labeled',
+  inline: true,
+};
 
 export const CenterAlign = Template.bind({});
 CenterAlign.args = {
   align: 'center',
+};
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  disabled: true
 };
 

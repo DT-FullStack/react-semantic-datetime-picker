@@ -12,7 +12,6 @@ const useKeepOnScreen = (ref: React.RefObject<HTMLElement>) => {
   useEffect(() => {
     if (ref.current) {
       const refBox = ref.current.getBoundingClientRect()
-      console.log({ viewBox: viewBox.right, refBox: refBox.right })
       if (isAbove(refBox)) { console.log('top'); ref.current.classList.add('top-guard') }
       else if (isBelow(refBox)) { console.log('bottom'); ref.current.classList.add('bottom-guard') }
       else if (isToLeft(refBox)) { console.log('left'); ref.current.classList.add('left-guard') }

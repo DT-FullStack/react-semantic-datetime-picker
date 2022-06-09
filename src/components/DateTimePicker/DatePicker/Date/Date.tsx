@@ -28,6 +28,7 @@ const Date = ({ datetime = DateTime.now(), setDatetime, onSet, onClickOut, ...co
           <Menu secondary>
             <Menu.Item icon onClick={prevMonth} content={<Icon name='arrow left' />} />
             <Header >
+
               <span className='clickable' onClick={() => setShowingMonths(true)}>{datetime.monthLong}</span>
               <span className='clickable' onClick={() => setShowingYears(true)}>{datetime.year}</span>
             </Header>

@@ -55,8 +55,6 @@ export function match(keys: DateObjectUnitKey[]): MatchFunction {
   return function (toMatch, toCheck) {
     for (let key of keys) {
       if (toMatch[key] !== undefined && toMatch[key] !== toCheck[key]) {
-        console.log(key, toMatch[key], toCheck[key], "\n", toMatch, toCheck)
-
         return false
       }
     }

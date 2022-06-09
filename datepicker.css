@@ -1,35 +1,35 @@
-.datepicker.container {
+.datepicker {
   position: relative;
 }
-.datepicker.container .header {
+.datepicker .header {
   margin: 0;
   flex-grow: 1;
   text-align: center;
   align-self: center;
 }
-.datepicker.container .picker {
+.datepicker .picker {
   width: 23em;
 }
-.datepicker.container .picker th, .datepicker.container .picker td {
+.datepicker .picker th, .datepicker .picker td {
   padding: 0;
 }
-.datepicker.container .picker th .sizer, .datepicker.container .picker td .sizer {
+.datepicker .picker th .sizer, .datepicker .picker td .sizer {
   width: 2.8em;
   padding: 0.5em 0.25em;
   text-align: center;
 }
-.datepicker.container .picker td {
+.datepicker .picker td {
   cursor: pointer;
   transition: background-color 400ms, opacity 400ms;
 }
-.datepicker.container .picker td:hover {
+.datepicker .picker td:hover {
   background-color: rgb(240, 240, 240);
   opacity: 1 !important;
 }
-.datepicker.container .picker td.otherMonth {
+.datepicker .picker td.otherMonth {
   opacity: 0.6;
 }
-.datepicker.container .picker td.active {
+.datepicker .picker td.active {
   background-color: #2185d0 !important;
   color: white !important;
 }
@@ -166,8 +166,27 @@
   background-color: #2185d0 !important;
   color: white !important;
 }
+.ui.form .fields .datetimepicker {
+  align-self: center;
+}
 .datetimepicker {
   font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+.datetimepicker.disabled {
+  color: rgb(90, 90, 90);
+}
+.datetimepicker.inline {
+  display: inline-block;
+}
+.datetimepicker.inline .datepicker, .datetimepicker.inline .timepicker {
+  display: inline-block;
+}
+.datetimepicker.inline .datepicker:not(:last-child), .datetimepicker.inline .timepicker:not(:last-child) {
+  margin-right: 0.5rem;
+}
+.datetimepicker.inline label {
+  margin-right: 1rem;
 }
 .datetimepicker.right {
   text-align: right;
@@ -180,6 +199,18 @@
 }
 .datetimepicker.left {
   text-align: left;
+}
+.datetimepicker label {
+  display: inline-block;
+  width: auto;
+  vertical-align: baseline;
+  font-size: 0.92857143em;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.87);
+  text-transform: none;
+}
+.datetimepicker .datetime-wrapper {
+  display: inline-block;
 }
 .datetimepicker .picker {
   position: relative;

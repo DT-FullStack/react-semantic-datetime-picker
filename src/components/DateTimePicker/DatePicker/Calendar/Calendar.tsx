@@ -15,11 +15,11 @@ const Calendar = ({ datetime = DateTime.now(), setDatetime, onSet, min, max, inc
   }
 
   // const hasInclude
-  const matchDayMonthYear = match(['day', 'month', 'year', 'weekday']);
+  const matchDay = match(['day', 'month', 'year', 'weekday']);
   const isInRange = withinRange({ min, max });
 
-  const isIncluded = (dt: DateObjectUnits): boolean => include.length ? include.find(day => matchDayMonthYear(day, dt)) !== undefined : true;
-  const isExcluded = (dt: DateObjectUnits): boolean => exclude.length ? exclude.find(day => matchDayMonthYear(day, dt)) !== undefined : true;
+  const isIncluded = (dt: DateObjectUnits): boolean => include.length ? include.find(day => matchDay(day, dt)) !== undefined : true;
+  const isExcluded = (dt: DateObjectUnits): boolean => exclude.length ? exclude.find(day => matchDay(day, dt)) !== undefined : false;
 
   const classes = (dt: DateObjectUnits) => [
     'datetimepicker',

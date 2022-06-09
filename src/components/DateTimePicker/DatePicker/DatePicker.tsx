@@ -15,7 +15,7 @@ export interface DatePickerProps extends UseDatetime, ConstraintOptions {
 
 }
 
-const DatePicker = ({ datetime = DateTime.now(), setDatetime, onSet, ...constraintOptions }: DatePickerProps) => {
+const DatePicker = ({ disabled, datetime = DateTime.now(), setDatetime, onSet, ...constraintOptions }: DatePickerProps) => {
 
   const [showingPicker, setShowingPicker] = useState(false);
   const showPicker = () => setShowingPicker(true)
@@ -24,9 +24,14 @@ const DatePicker = ({ datetime = DateTime.now(), setDatetime, onSet, ...constrai
   return (
     <div className='datepicker container'>
       <div>
-        <span className="clickable" onClick={showPicker}>
-          {datetime.toLocaleString()}
-        </span>
+        {disabled
+          ? <span >
+            {datetime.toLocaleString()}
+          </span>
+          : <span className="clickable" onClick={showPicker}>
+            {datetime.toLocaleString()}
+          </span>}
+
       </div>
       {showingPicker &&
         <Date {...constraintOptions} datetime={datetime} setDatetime={setDatetime} onClickOut={hidePicker} />

@@ -24,7 +24,7 @@ const PopUp = ({ children, onClickOut = () => { } }: PropsWithChildren<PopUpProp
     if (!body || !ref.current) return
     const viewBox = body.getBoundingClientRect()
     const refBox = ref.current.getBoundingClientRect();
-    console.log({ viewBox, refBox })
+    // console.log({ viewBox, refBox })
     if (isAbove(refBox)) { console.log('top'); ref.current.classList.add('top-guard') }
     else if (isBelow(refBox, viewBox)) { console.log('bottom'); ref.current.classList.add('bottom-guard') }
     else if (isToLeft(refBox)) { console.log('left'); ref.current.classList.add('left-guard') }
