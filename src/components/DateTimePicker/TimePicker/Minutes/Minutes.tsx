@@ -1,31 +1,45 @@
 import { DateObjectUnits, DateTime, Info } from 'luxon';
-import React, { useEffect } from 'react'
-import { Button, Card, List, Ref } from 'semantic-ui-react';
-import useClickOut from '@hooks/useClickOut';
+import React from 'react'
+import { List, Ref } from 'semantic-ui-react';
 import useScrollToActive from '@hooks/useScrollToActive';
-import { OnClickOut, UseDatetime } from '@util/DatetimeHelpers';
+import { isExcluded, match, OnClickOut, UseDatetime, withinRange } from '@util/DatetimeHelpers';
 import PopUp from '@util/PopUp';
+import { ConstraintOptions } from '../../DateTimePicker';
+import { minutes } from '@util/DatetimeConstants';
+import { isIncluded } from '../../../../util/DatetimeHelpers';
 
-interface MinutesProps extends UseDatetime, OnClickOut {
+interface MinutesProps extends UseDatetime, OnClickOut, ConstraintOptions {
 
 }
 
-const Minutes = ({ datetime = DateTime.now(), setDatetime, onSet, onClickOut }: MinutesProps) => {
+const Minutes = ({ datetime = DateTime.now(), setDatetime, onSet, onClickOut, start, end, include = [], exclude = [], includeRange, excludeRange, minuteStep }: MinutesProps) => {
   const set = (values: DateObjectUnits) => {
     if (setDatetime) setDatetime(datetime.set(values))
     if (onSet) onSet()
   }
-  const minutes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+
+  const isInRange = withinRange({ start, end });
+  const included = isIncluded(match.time, include, includeRange)
+  const excluded = isExcluded(match.time, exclude, excludeRange)
+
+  const isDisabled = (minute: number): boolean => !included({ minute }) || !isInRange({ minute }) || excluded({ minute })
+  const isActive = (minute: number): boolean => datetime.minute === minute && !isDisabled(minute)
+
+  const classes = (minute: number) => [
+    'datetimepicker',
+    isActive(minute) ? 'active' : '',
+    isDisabled(minute) ? 'disabled' : ''
+  ].join(' ')
+
 
   const scrollRef = useScrollToActive(datetime);
-  // useClickOut(scrollRef, onClickOut)
 
   return (
     <PopUp onClickOut={onClickOut}>
       <Ref innerRef={scrollRef}>
         <List className="scrolling picker">
-          {minutes.map((minute, m) =>
-            <List.Item key={m} className={datetime.minute === m ? 'active' : ''} content={datetime.set({ minute }).toFormat('h:mm')} onClick={() => set({ minute: m })} />
+          {minutes(minuteStep).map((minute, m) =>
+            <List.Item key={m} className={classes(minute)} content={datetime.set({ minute }).toFormat('h:mm')} onClick={() => set({ minute: m })} />
           )}
         </List>
       </Ref>

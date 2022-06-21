@@ -1,26 +1,43 @@
 
 
 import React, { useEffect, useState } from 'react'
-import { DateObjectUnits, DateTime } from 'luxon'
-// import './DateTimePicker.sass'
+import { DateObjectUnits, DateTime, DurationLikeObject, DurationUnits } from 'luxon'
 import DatePicker from './DatePicker/DatePicker'
 import TimePicker from './TimePicker/TimePicker'
 import 'semantic-ui-css/semantic.min.css'
 import '../shared.sass'
+import { getDateTime } from '@util/DatetimeHelpers'
 
+export interface Range {
+  start?: DateTime | DateObjectUnits,
+  end?: DateTime | DateObjectUnits
+}
+export interface AppInterval {
+  step: DurationLikeObject,
+  start: DateObjectUnits,
+  end?: DateObjectUnits
+}
 
 export interface ConstraintOptions {
-  min?: DateTime
-  max?: DateTime
+  start?: DateTime
+  end?: DateTime
   include?: (DateObjectUnits | DateTime)[]
   exclude?: (DateObjectUnits | DateTime)[]
+  includeRange?: Range | Range[]
+  excludeRange?: Range | Range[]
   disabled?: boolean
+  interval?: AppInterval
+  useSeconds?: boolean
+  useMillis?: boolean
+  secondsStep?: number
+  millisStep?: number
+  minuteStep?: number
+  useDate?: boolean
+  useTime?: boolean
 }
 
 export interface DateTimePickerProps extends ConstraintOptions {
   value?: DateTime | number,
-  selectDate?: boolean
-  selectTime?: boolean
   inline?: boolean
   name?: string
   align?: 'left' | 'right' | 'center'
@@ -31,7 +48,7 @@ export interface DateTimePickerProps extends ConstraintOptions {
 
 const DateTimePicker = ({
   value,
-  selectDate = true, selectTime = true,
+  useDate = true, useTime = true,
   name = 'datetime',
   align = 'center',
   className = '',
@@ -41,8 +58,13 @@ const DateTimePicker = ({
   ...constraintProps
 
 }: DateTimePickerProps) => {
-  const getDateTime = (dt: DateTime | number): DateTime => typeof dt === 'number' ? DateTime.fromMillis(dt) : dt;
-  const [datetime, setDatetime] = useState(value ? getDateTime(value) : DateTime.now())
+  let initial = undefined
+  if (value) initial = value
+  else if (constraintProps.include) {
+    const firstAvailable = constraintProps.include[0]
+    initial = firstAvailable instanceof DateTime ? firstAvailable : DateTime.now().set(firstAvailable)
+  }
+  const [datetime, setDatetime] = useState(initial ? getDateTime(initial) : DateTime.now())
 
   const classes = () => [
     'datetimepicker',
@@ -66,9 +88,9 @@ const DateTimePicker = ({
       <input hidden name={name} value={datetime.toMillis()} readOnly />
       <input hidden name={name + '-date-only'} value={datetime.toISODate()} readOnly />
       <input hidden name={name + '-time-only'} value={datetime.toISOTime()} readOnly />
-      {selectDate &&
+      {useDate &&
         <DatePicker {...constraintProps} datetime={datetime} setDatetime={setDatetime} />}
-      {selectTime &&
+      {useTime &&
         <TimePicker {...constraintProps} datetime={datetime} setDatetime={setDatetime} />}
     </div>
   )

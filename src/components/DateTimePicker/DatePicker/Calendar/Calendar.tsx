@@ -1,31 +1,33 @@
 import { DateObjectUnits, DateTime } from 'luxon'
 import React from 'react'
 import { Table } from 'semantic-ui-react'
-import { calDaysChunks, match, sundayFirstWeekdays, UseDatetime, withinRange } from '@util/DatetimeHelpers';
+import { calDaysChunks, getConstraintClasses, getConstraintInfo, isExcluded, isIncluded, match, sundayFirstWeekdays, UseDatetime, withinAnyRange, withinRange } from '@util/DatetimeHelpers';
 import { ConstraintOptions } from '../../DateTimePicker';
 
 interface CalendarProps extends UseDatetime, ConstraintOptions {
 
 }
 
-const Calendar = ({ datetime = DateTime.now(), setDatetime, onSet, min, max, include = [], exclude = [] }: CalendarProps) => {
+const Calendar = ({ datetime = DateTime.now(), setDatetime, onSet, ...constraintOptions }: CalendarProps) => {
   const set = (values: DateObjectUnits) => {
     if (setDatetime) setDatetime(datetime.set(values))
     if (onSet) onSet()
   }
 
-  // const hasInclude
-  const matchDay = match(['day', 'month', 'year', 'weekday']);
-  const isInRange = withinRange({ min, max });
+  const getConstaints = getConstraintInfo(match.date, constraintOptions)
 
-  const isIncluded = (dt: DateObjectUnits): boolean => include.length ? include.find(day => matchDay(day, dt)) !== undefined : true;
-  const isExcluded = (dt: DateObjectUnits): boolean => exclude.length ? exclude.find(day => matchDay(day, dt)) !== undefined : false;
 
-  const classes = (dt: DateObjectUnits) => [
-    'datetimepicker',
-    datetime.month !== dt.month ? 'otherMonth' : '',
-    (!isIncluded(dt) || !isInRange(dt) || isExcluded(dt)) ? 'disabled' : ''
-  ].join(' ')
+  const classes = (dt: DateObjectUnits) => {
+    const constraints = getConstaints(dt, datetime)
+    const list = ['datetimepicker', ...getConstraintClasses(constraints)]
+    if (!match.month(datetime, dt)) list.push('otherMonth')
+    return list.join(' ')
+  }
+
+  const handleClick = (dt: DateObjectUnits) => {
+    const { month, day, year } = dt
+    set({ month, day, year })
+  }
 
   return (
     <Table celled className='unstackable'>
@@ -38,7 +40,7 @@ const Calendar = ({ datetime = DateTime.now(), setDatetime, onSet, min, max, inc
         {calDaysChunks(datetime).map((week, w) =>
           <Table.Row key={w}>
             {week.map((dt, d) =>
-              <Table.Cell active={datetime.day === dt.day && datetime.month === dt.month} className={classes(dt)} onClick={() => set(dt)} key={d} content={<div className='sizer'>{dt.day}</div>} />
+              <Table.Cell active={datetime.day === dt.day && datetime.month === dt.month} className={classes(dt)} onClick={() => handleClick(dt)} key={d} content={<div className='sizer'>{dt.day}</div>} />
             )}
           </Table.Row>)
         }

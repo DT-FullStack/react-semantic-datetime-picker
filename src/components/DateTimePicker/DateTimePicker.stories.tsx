@@ -18,84 +18,33 @@ export default {
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const Template: ComponentStory<typeof DateTimePicker> = (args) => <DateTimePicker {...args} />;
 
-export const RightAlign = Template.bind({});
-RightAlign.args = {
-  align: 'right',
-};
-export const InCardGroup: ComponentStory<typeof DateTimePicker> = (args) =>
+export const Alignment: ComponentStory<typeof DateTimePicker> = () =>
   <CardGroup className='three'  >
-    <Card content={<DateTimePicker {...args} />} />
-    <Card content={<DateTimePicker {...args} />} />
-    <Card content={<DateTimePicker {...args} />} />
+    <Card content={<CardContent content={<DateTimePicker label="Left Align" align='left' />} />} />
+    <Card content={<CardContent content={<DateTimePicker label="Center Align" align='center' />} />} />
+    <Card content={<CardContent content={<DateTimePicker label="Right Align" align='right' />} />} />
   </CardGroup>
 
-export const InCardContent: ComponentStory<typeof DateTimePicker> = (args) =>
+export const DateOrTimeVariations = () =>
   <CardGroup className='three'  >
-    <Card content={<CardContent content={<DateTimePicker {...args} />} />} />
-    <Card content={<CardContent content={<DateTimePicker {...args} />} />} />
-    <Card content={<CardContent content={<DateTimePicker {...args} />} />} />
+    <Card content={<CardContent content={<DateTimePicker label="Date and Time (default)" />} />} />
+    <Card content={<CardContent content={<DateTimePicker label="Date Only" useTime={false} />} />} />
+    <Card content={<CardContent content={<DateTimePicker label="Time Only" useDate={false} />} />} />
   </CardGroup>
 
-export const InFormGroup: ComponentStory<typeof DateTimePicker> = (args) =>
-  <Form>
-    <Form.Group   >
-      <FormField inline type='text' control={Input} />
-      <DateTimePicker {...args} />
-      <FormField inline type='number' control={Input} />
-    </Form.Group>
+export const InitialValues = () =>
+  <CardGroup className='three'  >
+    <Card content={<CardContent content={<DateTimePicker label="Now (default)" />} />} />
+    <Card content={<CardContent content={<DateTimePicker label="A week from now" value={DateTime.now().plus({ week: 1 })} />} />} />
+    <Card content={<CardContent content={<DateTimePicker label="A month ago" value={DateTime.now().minus({ month: 1 })} />} />} />
+    <Card content={<CardContent content={<DateTimePicker label="Today at noon" value={DateTime.fromObject({ hour: 12 })} />} />} />
+  </CardGroup>
 
-  </Form>
+export const TimeAccuracy = () =>
+  <Card.Group>
+    <Card content={<CardContent content={<DateTimePicker label="Hours and minutes (default)" />} />} />
+    <Card content={<CardContent content={<DateTimePicker label="Include seconds" useSeconds />} />} />
+    <Card content={<CardContent content={<DateTimePicker label="Include milliseconds" useMillis />} />} />
+  </Card.Group>
 
-
-export const IncludeDateTimeInstance = Template.bind({});
-IncludeDateTimeInstance.args = {
-  include: [DateTime.now(), DateTime.now().plus({ day: 1 }), DateTime.now().plus({ day: 4 })]
-};
-export const IncludeDateTimeObject = Template.bind({});
-IncludeDateTimeObject.args = {
-  include: [{ month: 5 }, { day: 6 }]
-};
-
-export const ExcludeDateTimeInstance = Template.bind({});
-ExcludeDateTimeInstance.args = {
-  exclude: [DateTime.now(), DateTime.now().plus({ day: 1 }), DateTime.now().plus({ day: 4 })]
-};
-export const ExcludeDateTimeObject = Template.bind({});
-ExcludeDateTimeObject.args = {
-  exclude: [{ month: 5 }, { day: 6 }]
-};
-export const ExcludeDateOfWeek = Template.bind({});
-ExcludeDateOfWeek.args = {
-  exclude: [{ weekday: 7 }]
-};
-
-
-export const WithRange = Template.bind({});
-WithRange.args = {
-  min: DateTime.fromObject({ year: 2020 }),
-  max: DateTime.fromObject({ month: 5 })
-};
-export const Inline = Template.bind({});
-Inline.args = {
-  inline: true,
-};
-export const Label = Template.bind({});
-Label.args = {
-  label: 'Labeled',
-};
-export const InlineLabel = Template.bind({});
-InlineLabel.args = {
-  label: 'Labeled',
-  inline: true,
-};
-
-export const CenterAlign = Template.bind({});
-CenterAlign.args = {
-  align: 'center',
-};
-
-export const Disabled = Template.bind({});
-Disabled.args = {
-  disabled: true
-};
 
