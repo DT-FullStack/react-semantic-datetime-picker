@@ -7,29 +7,23 @@ import PopUp from '@util/PopUp';
 import { ConstraintOptions } from '../../DateTimePicker';
 import { minutes } from '@util/DatetimeConstants';
 import { isIncluded } from '../../../../util/DatetimeHelpers';
+import { useDateTime } from 'src/context/datetime';
+import useGetInfo from '@hooks/useGetInfo';
 
 interface MinutesProps extends UseDatetime, OnClickOut, ConstraintOptions {
 
 }
 
-const Minutes = ({ datetime = DateTime.now(), setDatetime, onSet, onClickOut, start, end, include = [], exclude = [], includeRange, excludeRange, minuteStep }: MinutesProps) => {
+const Minutes = ({ onSet, onClickOut, start, end, include = [], exclude = [], includeRange, excludeRange, minuteStep }: MinutesProps) => {
+  const [datetime, setDatetime] = useDateTime()
+
+
   const set = (values: DateObjectUnits) => {
-    if (setDatetime) setDatetime(datetime.set(values))
+    setDatetime.current(values)
     if (onSet) onSet()
   }
 
-  const isInRange = withinRange({ start, end });
-  const included = isIncluded(match.time, include, includeRange)
-  const excluded = isExcluded(match.time, exclude, excludeRange)
-
-  const isDisabled = (minute: number): boolean => !included({ minute }) || !isInRange({ minute }) || excluded({ minute })
-  const isActive = (minute: number): boolean => datetime.minute === minute && !isDisabled(minute)
-
-  const classes = (minute: number) => [
-    'datetimepicker',
-    isActive(minute) ? 'active' : '',
-    isDisabled(minute) ? 'disabled' : ''
-  ].join(' ')
+  const [classes, constraints] = useGetInfo(datetime, match.minute)
 
 
   const scrollRef = useScrollToActive(datetime);
@@ -39,7 +33,7 @@ const Minutes = ({ datetime = DateTime.now(), setDatetime, onSet, onClickOut, st
       <Ref innerRef={scrollRef}>
         <List className="scrolling picker">
           {minutes(minuteStep).map((minute, m) =>
-            <List.Item key={m} className={classes(minute)} content={datetime.set({ minute }).toFormat('h:mm')} onClick={() => set({ minute: m })} />
+            <List.Item key={m} className={classes({ minute }, 'minute')} content={datetime.current.set({ minute }).toFormat('h:mm')} onClick={() => set({ minute: m })} />
           )}
         </List>
       </Ref>

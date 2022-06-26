@@ -7,43 +7,46 @@ import "./TimePicker.sass"
 import { ConstraintOptions } from '../DateTimePicker';
 import Seconds from './Seconds/Seconds';
 import Millis from './Millis/Millis';
+import { useDateTime } from 'src/context/datetime';
 
 
-export interface TimePickerProps extends UseDatetime, ConstraintOptions { }
+export interface TimePickerProps { }
 
-const TimePicker = ({ disabled, datetime = DateTime.now(), setDatetime, onSet, useSeconds, useMillis, ...constraintOptions }: TimePickerProps) => {
+const TimePicker = ({ }: TimePickerProps) => {
   const [showingHours, setShowingHours] = useState(false);
   const [showingMinutes, setShowingMinutes] = useState(false);
   const [showingSeconds, setShowingSeconds] = useState(false);
   const [showingMillis, setShowingMillis] = useState(false);
 
+  const [datetime, setDatetime] = useDateTime()
+  const { constraints: { disabled, useSeconds, useMillis } } = datetime;
 
   return (
     <div className='timepicker'>
       {disabled
         ? <div>
-          <span >{datetime.toFormat('h')}</span>:
-          <span >{datetime.toFormat('mm')}</span>
-          {(useSeconds || useMillis) && <span >{datetime.toFormat('ss')}</span>}
-          {useMillis && <span >{datetime.toFormat('SSS')}</span>}
-          <span style={{ marginLeft: '0.5rem' }}>{datetime.toFormat('a')}</span>
+          <span >{datetime.current.toFormat('h')}</span>:
+          <span >{datetime.current.toFormat('mm')}</span>
+          {(useSeconds || useMillis) && <span >{datetime.current.toFormat('ss')}</span>}
+          {useMillis && <span >{datetime.current.toFormat('SSS')}</span>}
+          <span style={{ marginLeft: '0.5rem' }}>{datetime.current.toFormat('a')}</span>
         </div>
         : <div>
-          <span className='clickable' onClick={() => setShowingHours(true)}>{datetime.toFormat('h')}</span>:
-          <span className='clickable compact' onClick={() => setShowingMinutes(true)}>{datetime.toFormat('mm')}</span>
-          {(useSeconds || useMillis) && <span className='clickable compact' onClick={() => setShowingSeconds(true)}>:{datetime.toFormat('ss')}</span>}
-          {useMillis && <span className='clickable compact' onClick={() => setShowingMillis(true)}>.{datetime.toFormat('SSS')}</span>}
-          <span className='clickable' onClick={() => setShowingHours(true)}>{datetime.toFormat('a')}</span>
+          <span className='clickable' onClick={() => setShowingHours(true)}>{datetime.current.toFormat('h')}</span>:
+          <span className='clickable compact' onClick={() => setShowingMinutes(true)}>{datetime.current.toFormat('mm')}</span>
+          {(useSeconds || useMillis) && <span className='clickable compact' onClick={() => setShowingSeconds(true)}>:{datetime.current.toFormat('ss')}</span>}
+          {useMillis && <span className='clickable compact' onClick={() => setShowingMillis(true)}>.{datetime.current.toFormat('SSS')}</span>}
+          <span className='clickable' onClick={() => setShowingHours(true)}>{datetime.current.toFormat('a')}</span>
         </div>}
 
       {showingHours &&
-        <Hours  {...constraintOptions} datetime={datetime} setDatetime={setDatetime} onSet={() => setShowingHours(false)} onClickOut={() => setShowingHours(false)} />}
+        <Hours onSet={() => setShowingHours(false)} onClickOut={() => setShowingHours(false)} />}
       {showingMinutes &&
-        <Minutes {...constraintOptions} datetime={datetime} setDatetime={setDatetime} onSet={() => setShowingMinutes(false)} onClickOut={() => setShowingMinutes(false)} />}
+        <Minutes onSet={() => setShowingMinutes(false)} onClickOut={() => setShowingMinutes(false)} />}
       {showingSeconds &&
-        <Seconds {...constraintOptions} datetime={datetime} setDatetime={setDatetime} onSet={() => setShowingSeconds(false)} onClickOut={() => setShowingSeconds(false)} />}
+        <Seconds onSet={() => setShowingSeconds(false)} onClickOut={() => setShowingSeconds(false)} />}
       {showingMillis &&
-        <Millis {...constraintOptions} datetime={datetime} setDatetime={setDatetime} onSet={() => setShowingMillis(false)} onClickOut={() => setShowingMillis(false)} />}
+        <Millis onSet={() => setShowingMillis(false)} onClickOut={() => setShowingMillis(false)} />}
     </div>
   )
 }

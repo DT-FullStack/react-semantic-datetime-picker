@@ -1,30 +1,38 @@
 import { DateObjectUnits, DateTime } from 'luxon'
 import React from 'react'
 import { Table } from 'semantic-ui-react'
-import { calDaysChunks, getConstraintClasses, getConstraintInfo, isExcluded, isIncluded, match, sundayFirstWeekdays, UseDatetime, withinAnyRange, withinRange } from '@util/DatetimeHelpers';
+import { calDaysChunks, ClassFnGenerator, ClassFunction, match, sundayFirstWeekdays, UseDatetime } from '@util/DatetimeHelpers';
 import { ConstraintOptions } from '../../DateTimePicker';
+import { useDateTime } from 'src/context/datetime';
+import useClasses from '@hooks/useClasses';
+import useConstraints from '@hooks/useConstraints';
+import useGetInfo from '@hooks/useGetInfo';
 
 interface CalendarProps extends UseDatetime, ConstraintOptions {
 
 }
 
-const Calendar = ({ datetime = DateTime.now(), setDatetime, onSet, ...constraintOptions }: CalendarProps) => {
+const Calendar = ({ onSet }: CalendarProps) => {
+  const [datetime, setDatetime] = useDateTime();
+
   const set = (values: DateObjectUnits) => {
-    if (setDatetime) setDatetime(datetime.set(values))
+    if (setDatetime) setDatetime.current(values)
     if (onSet) onSet()
   }
 
-  const getConstaints = getConstraintInfo(match.date, constraintOptions)
-
-
-  const classes = (dt: DateObjectUnits) => {
-    const constraints = getConstaints(dt, datetime)
-    const list = ['datetimepicker', ...getConstraintClasses(constraints)]
-    if (!match.month(datetime, dt)) list.push('otherMonth')
-    return list.join(' ')
+  const monthClass: ClassFnGenerator = (state) => {
+    return function (dt) {
+      return !match.month(state.cursor, dt) ? 'otherMonth' : undefined
+    }
   }
+  const todayClass: ClassFnGenerator = (state) => {
+    return function (dt) {
+      return DateTime.now().startOf('day').toMillis() === DateTime.fromObject(dt).startOf('day').toMillis() ? 'today' : undefined
+    }
+  }
+  const [classes] = useGetInfo(datetime, match.date, [monthClass, todayClass])
 
-  const handleClick = (dt: DateObjectUnits) => {
+  const handleDateClick = (dt: DateObjectUnits) => {
     const { month, day, year } = dt
     set({ month, day, year })
   }
@@ -37,10 +45,10 @@ const Calendar = ({ datetime = DateTime.now(), setDatetime, onSet, ...constraint
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {calDaysChunks(datetime).map((week, w) =>
+        {calDaysChunks(datetime.cursor).map((week, w) =>
           <Table.Row key={w}>
             {week.map((dt, d) =>
-              <Table.Cell active={datetime.day === dt.day && datetime.month === dt.month} className={classes(dt)} onClick={() => handleClick(dt)} key={d} content={<div className='sizer'>{dt.day}</div>} />
+              <Table.Cell className={classes(dt)} onClick={() => handleDateClick(dt)} key={d} content={<div className='sizer'>{dt.day}</div>} />
             )}
           </Table.Row>)
         }

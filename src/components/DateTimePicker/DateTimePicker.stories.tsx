@@ -47,4 +47,16 @@ export const TimeAccuracy = () =>
     <Card content={<CardContent content={<DateTimePicker label="Include milliseconds" useMillis />} />} />
   </Card.Group>
 
+export const DisabledInput = () =>
+  <Card.Group>
+    <Card content={<CardContent content={<DateTimePicker label="Enabled (default)" />} />} />
+    <Card content={<CardContent content={<DateTimePicker label="Disabled" disabled />} />} />
+  </Card.Group>
+
+export const DisplayOptions = () =>
+  <Card.Group>
+    <Card content={<CardContent content={<DateTimePicker label="Block (default)" />} />} />
+    <Card content={<CardContent content={<DateTimePicker label="Inline" inline />} />} />
+  </Card.Group>
+
 

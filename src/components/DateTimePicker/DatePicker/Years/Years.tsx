@@ -3,12 +3,18 @@ import React, { useEffect, useState } from 'react'
 import { Card, Header, Icon, Menu } from 'semantic-ui-react';
 import { isIncluded, isExcluded, match, UseDatetime, withinRange } from '@util/DatetimeHelpers';
 import { ConstraintOptions } from '../../DateTimePicker';
+import { useDateTime } from 'src/context/datetime';
+import useConstraints from '@hooks/useConstraints';
+import useClasses from '@hooks/useClasses';
+import useGetInfo from '@hooks/useGetInfo';
 
 interface YearsProps extends UseDatetime, ConstraintOptions { }
 
-const Years = ({ datetime = DateTime.now(), setDatetime, onSet, start, end, include = [], exclude = [], includeRange, excludeRange }: YearsProps) => {
+const Years = ({ onSet, start, end, include = [], exclude = [], includeRange, excludeRange }: YearsProps) => {
+  const [datetime, setDatetime] = useDateTime()
+
   const set = (values: DateObjectUnits) => {
-    if (setDatetime) setDatetime(datetime.set(values))
+    setDatetime.cursor(values)
     if (onSet) onSet()
   }
 
@@ -18,26 +24,19 @@ const Years = ({ datetime = DateTime.now(), setDatetime, onSet, start, end, incl
     for (let y = year - past; y < year + present; y++) { arr.push(y) }
     return arr;
   }
-  const [years, setYears] = useState(getYears(datetime));
+  const [years, setYears] = useState(getYears(datetime.cursor));
   const [past, setPast] = useState(6);
   const [future, setFuture] = useState(6);
 
   useEffect(() => {
-    setYears(getYears(datetime, past, future))
+    setYears(getYears(datetime.cursor, past, future))
   }, [past, future, setYears])
 
-  const isInRange = withinRange({ start, end });
-  const included = isIncluded(match.year, include, includeRange)
-  const excluded = isExcluded(match.year, exclude, excludeRange)
+  const [classes, constraints] = useGetInfo(datetime, match.date)
 
-  const isDisabled = (year: number): boolean => !included({ year }) || !isInRange({ year }) || excluded({ year })
-  const isActive = (year: number): boolean => datetime.year === year && !isDisabled(year)
-
-  const classes = (year: number) => [
-    'datetimepicker',
-    isActive(year) ? 'active' : '',
-    isDisabled(year) ? 'disabled' : ''
-  ].join(' ')
+  const handleClick = (year: number) => {
+    if (!constraints({ year }).isDisabled) return () => set({ year })
+  }
 
   return (
     <React.Fragment>
@@ -50,7 +49,7 @@ const Years = ({ datetime = DateTime.now(), setDatetime, onSet, start, end, incl
       </Menu>
       <Card.Group className="compact years" itemsPerRow={4}>
         {years.map((year) =>
-          <Card key={year} className={classes(year)} content={year} onClick={!isDisabled(year) ? () => set({ year }) : undefined} />
+          <Card key={year} className={classes({ year })} content={year} onClick={handleClick(year)} />
         )}
       </Card.Group>
     </React.Fragment>

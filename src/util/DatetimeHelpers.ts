@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { DateObjectUnits, DateTime, Duration, DurationLikeObject, Info, InfoUnitOptions, StringUnitLength } from 'luxon'
 import { AppInterval, ConstraintOptions, Range } from 'src/components/DateTimePicker/DateTimePicker'
+import { DateTimeState } from 'src/context/datetime'
 
 export interface UseDatetime {
   datetime?: DateTime
@@ -12,11 +13,21 @@ export interface OnClickOut {
 }
 
 /**
- * Typechecks a value and gives a DateTime instance
+ * Typechecks a value and gives a DateTime instance.
  * @param {DateTime | number} dt Luxon DateTime instance, or timestamp in milliseconds
  * @returns {DateTime} Luxon DateTime instance
  */
-export const getDateTime = (dt: DateTime | number): DateTime => typeof dt === 'number' ? DateTime.fromMillis(dt) : dt;
+export const getDateTimeFromNumber = (dt: DateTime | number): DateTime => typeof dt === 'number' ? DateTime.fromMillis(dt) : dt;
+/**
+ * Converts a date-like obj into a DateTime instance
+ * @param obj datetime representation, returns `obj` if it is a DateTime instance
+ * @param dtReference starting point for DateTime properties, if not given uses DateTime.now
+ * @returns a DateTime instance
+ */
+export const getDateTimeFromObj = (obj: DateTime | DateObjectUnits, dtReference?: DateTime) => {
+  if (obj instanceof DateTime) return obj
+  return dtReference ? dtReference.set(obj) : DateTime.fromObject(obj)
+}
 
 /**
  * Provides weekday names in the local language, starting with Sunday instead of Monday
@@ -95,16 +106,17 @@ export type MatchFunction = (toMatch: DateTime | DateObjectUnits, toCheck: DateO
  */
 export function matchDtObject(keys: DateObjectUnitKey[]): MatchFunction {
   return function (toMatch, objToCheck) {
-    // let keysToMatch = Object.keys(toMatch) as DateObjectUnitKey[]
-    // if (keysToMatch.find(unit => !keys.includes(unit)) !== undefined) {
-    //   const err = new Error(`Match function not configured to check for requested keys: ${JSON.stringify({ configured: keys, requested: keysToMatch })}`)
-    //   console.error(err)
-    //   return false
-    // }
 
+    // /**
+    //  * Creating a DateTime instance from `objToCheck`
+    //  * This allows us to check keys even if they are not explicitly assigned
+    //  */
     let dtToCheck = DateTime.fromObject(objToCheck)
     for (let key of keys) {
       if (toMatch[key] !== undefined && toMatch[key] !== dtToCheck[key]) {
+        if (key === 'second' || key === 'millisecond') {
+          console.log(key, objToCheck, { dtToCheck: dtToCheck[key], toMatch: toMatch[key] })
+        }
         return false
       }
     }
@@ -118,7 +130,11 @@ export const match = {
   year: matchDtObject(['year']),
   month: matchDtObject(['year', 'month']),
   date: matchDtObject(['year', 'month', 'day', 'ordinal', 'weekNumber', 'weekday']),
-  time: matchDtObject(['year', 'month', 'day', 'ordinal', 'weekNumber', 'weekday', 'hour', 'minute', 'second', 'millisecond']),
+  hour: matchDtObject(['year', 'month', 'day', 'ordinal', 'weekNumber', 'weekday', 'hour']),
+  minute: matchDtObject(['year', 'month', 'day', 'ordinal', 'weekNumber', 'weekday', 'hour', 'minute']),
+  second: matchDtObject(['year', 'month', 'day', 'ordinal', 'weekNumber', 'weekday', 'hour', 'minute', 'second']),
+  millisecond: matchDtObject(['year', 'month', 'day', 'ordinal', 'weekNumber', 'weekday', 'hour', 'minute', 'millisecond']),
+  full: matchDtObject(['year', 'month', 'day', 'ordinal', 'weekNumber', 'weekday', 'hour', 'minute', 'second', 'millisecond']),
   timeOnly: matchDtObject(['hour', 'minute', 'second', 'millisecond']),
 }
 
@@ -213,6 +229,7 @@ export function isExcluded(
   }
 }
 
+
 /**
  * Object representing whether a given DateTime instance should be included based on all constraints
  */
@@ -222,50 +239,76 @@ export interface ConstraintInfo {
   isExcluded: boolean
   fitsInterval: boolean
   isMatch: boolean
+  isDisabled: boolean
 }
-export type ConstraintFunction = (toCheck: DateObjectUnits, currentDt: DateTime) => ConstraintInfo
-
+/**
+ * Function that provides ConstraintInfo for a given DateObjectUnits object
+ */
+export type ConstraintFunction = (toCheck: DateObjectUnits) => ConstraintInfo
+export type ConstraintOptionsSlim = Pick<ConstraintOptions, 'start' | 'end' | 'include' | 'includeRange' | 'exclude' | 'excludeRange' | 'interval'>
 /**
  * Generates a function that is used to determine if a given DateObject is allowed
  * @param matchFunction the function used to compare two DateTimes
- * @param options the constraints on which DateTimes are allowed
+ * @param constraints the constraints on which DateTimes are allowed
  * @returns a function that provides all ConstraintInfo in an object
  */
-export function getConstraintInfo(
+export function getConstraintFn(
+  datetime: DateTimeState,
   matchFunction: MatchFunction,
-  { start, end, include = [], includeRange, exclude = [], excludeRange, interval }: Pick<ConstraintOptions, 'start' | 'end' | 'include' | 'includeRange' | 'exclude' | 'excludeRange' | 'interval'>
 ): ConstraintFunction {
+  const { start, end, include = [], includeRange, exclude = [], excludeRange, interval } = datetime.constraints
   const inRange = withinRange({ start, end })
   const included = isIncluded(matchFunction, include, includeRange)
   const excluded = isExcluded(matchFunction, exclude, excludeRange)
+  const intervalMatch = getIntervalFn(datetime)
 
-  return function (toCheck, currentDt) {
+  return function (toCheck) {
     const info = {
       isInRange: inRange(toCheck),
       isIncluded: included(toCheck),
       isExcluded: excluded(toCheck),
-      fitsInterval: true,
-      isMatch: matchFunction(currentDt, toCheck)
+      fitsInterval: intervalMatch(toCheck),
+      isMatch: matchFunction(datetime.current, toCheck),
+      isDisabled: false
     }
+    console.log(toCheck, info)
+    info.isDisabled = !info.isIncluded || !info.isInRange || info.isExcluded || !info.fitsInterval
     return info
   }
 }
 
-type ConstraintClasses = ('active' | 'disabled')[]
-export function getConstraintClasses({ isMatch, isInRange, isIncluded, isExcluded }: ConstraintInfo): ConstraintClasses {
+type ConstraintClasses = ('active' | 'disabled' | 'nonInterval' | 'hidden')[]
+export function getConstraintClasses({ isMatch, isDisabled, fitsInterval }: ConstraintInfo): ConstraintClasses {
   const classes: ConstraintClasses = []
   if (isMatch) classes.push('active')
-  if (!isInRange || !isIncluded || isExcluded) classes.push('disabled')
+  if (isDisabled) classes.push('disabled')
+  if (!fitsInterval) classes.push('nonInterval')
   return classes
 }
 
-export function fitsInterval(interval: AppInterval, dt: DateTime): boolean {
-  const start = dt.set(interval.start)
-  const end = interval.end ? dt.set(interval.end) : null
-  const duration = Duration.fromObject(interval.step)
-  console.log(start, end)
-  if (dt.toMillis() < start.toMillis()) return false
-  if (end && dt.toMillis() > end.toMillis()) return false
+export type ClassFunction = (dt: DateObjectUnits, category?: string) => string
+export type ClassFnGenerator = (datetime: DateTimeState, constraintFn: ConstraintFunction, classGenerators?: ClassFnGenerator[]) => ClassFunction
+export const getClassFn: ClassFnGenerator = (datetime, constraintFn, classGenerators = []): ClassFunction => {
+  return function (dt, category) {
+    const constraints = constraintFn(dt)
+    const list = ['datetimepicker', ...getConstraintClasses(constraints)]
+    const extras = classGenerators.map(fn => fn(datetime, constraintFn)(dt))
+    if (category) list.push(...category.split(' '))
+    return [...list, ...extras].join(' ')
+  }
+}
 
-  return dt.toMillis() % duration.toMillis() === 0
+export type IntervalFunction = (toCheck: DateObjectUnits) => boolean
+export function getIntervalFn(datetime: DateTimeState): IntervalFunction {
+  const { constraints: { interval } } = datetime
+  return function (toCheck) {
+    if (!interval) return true
+    const dtToCheck = DateTime.fromObject(toCheck)
+    const start = getDateTimeFromObj(interval.start, dtToCheck)
+    const end = interval.end ? getDateTimeFromObj(interval.end, dtToCheck) : null
+    const duration = Duration.fromObject(interval.step)
+    if (dtToCheck.toMillis() < start.toMillis()) return false
+    if (end && dtToCheck.toMillis() > end.toMillis()) return false
+    return dtToCheck.toMillis() % duration.toMillis() === 0
+  }
 }

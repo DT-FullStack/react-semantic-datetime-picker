@@ -7,24 +7,33 @@
     align-self: center
   .picker
     width: 23em
-    th, td
-      padding: 0
-      .sizer
-        width: 2.8em
-        padding: 0.5em 0.25em
-        text-align: center
-    td 
-      cursor: pointer
-      transition: background-color 400ms, opacity 400ms
-      &:hover
-        background-color: rgb(240,240,240)
-        opacity: 1 !important
-      &.otherMonth
-        opacity: 0.6
-      &.active
-        background-color: #2185d0 !important
-        color: white !important
-
+    .ui.menu
+      position: relative
+      .item.today
+        position: absolute
+        right: 2.75em
+    .ui.header
+      margin: 0
+    .ui.table
+      th, td
+        padding: 0
+        .sizer
+          width: 2.8em
+          padding: 0.5em 0.25em
+          text-align: center
+      td 
+        cursor: pointer
+        transition: background-color 400ms, opacity 400ms
+        &:hover
+          background-color: rgb(240,240,240)
+          opacity: 1 !important
+        &.otherMonth
+          opacity: 0.6
+        &.active
+          background-color: #2185d0 !important
+          color: white !important
+        &.today
+          background-color: rgb(230,230,230)
 @media only screen and (max-width: 320px)
   .datepicker
     .picker

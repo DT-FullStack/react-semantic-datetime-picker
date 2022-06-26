@@ -1,12 +1,12 @@
 
 
 import React, { useEffect, useState } from 'react'
+import { DateTimeProvider, useDateTime } from '../../context/datetime';
 import { DateObjectUnits, DateTime, DurationLikeObject, DurationUnits } from 'luxon'
 import DatePicker from './DatePicker/DatePicker'
 import TimePicker from './TimePicker/TimePicker'
 import 'semantic-ui-css/semantic.min.css'
 import '../shared.sass'
-import { getDateTime } from '@util/DatetimeHelpers'
 
 export interface Range {
   start?: DateTime | DateObjectUnits,
@@ -14,8 +14,8 @@ export interface Range {
 }
 export interface AppInterval {
   step: DurationLikeObject,
-  start: DateObjectUnits,
-  end?: DateObjectUnits
+  start: DateTime | DateObjectUnits,
+  end?: DateTime | DateObjectUnits
 }
 
 export interface ConstraintOptions {
@@ -58,13 +58,16 @@ const DateTimePicker = ({
   ...constraintProps
 
 }: DateTimePickerProps) => {
+
+
   let initial = undefined
   if (value) initial = value
   else if (constraintProps.include) {
     const firstAvailable = constraintProps.include[0]
     initial = firstAvailable instanceof DateTime ? firstAvailable : DateTime.now().set(firstAvailable)
   }
-  const [datetime, setDatetime] = useState(initial ? getDateTime(initial) : DateTime.now())
+
+  const [datetime, setDatetime] = useDateTime()
 
   const classes = () => [
     'datetimepicker',
@@ -75,24 +78,22 @@ const DateTimePicker = ({
   ].join(' ')
 
   useEffect(() => {
-    if (value) setDatetime(getDateTime(value))
-  }, [value])
-
-  useEffect(() => {
-    if (onChange) onChange(datetime)
-  }, [datetime])
+    if (onChange) onChange(datetime.current)
+  }, [datetime.current])
 
   return (
-    <div className={classes()}>
-      {label && <label>{label}</label>}
-      <input hidden name={name} value={datetime.toMillis()} readOnly />
-      <input hidden name={name + '-date-only'} value={datetime.toISODate()} readOnly />
-      <input hidden name={name + '-time-only'} value={datetime.toISOTime()} readOnly />
-      {useDate &&
-        <DatePicker {...constraintProps} datetime={datetime} setDatetime={setDatetime} />}
-      {useTime &&
-        <TimePicker {...constraintProps} datetime={datetime} setDatetime={setDatetime} />}
-    </div>
+    <DateTimeProvider value={value} constraints={constraintProps}>
+      <div className={classes()}>
+        {label && <label>{label}</label>}
+        <input hidden name={name + '-timestamp'} value={datetime.current.toMillis()} readOnly />
+        <input hidden name={name + '-date-only'} value={datetime.current.toISODate()} readOnly />
+        <input hidden name={name + '-time-only'} value={datetime.current.toISOTime()} readOnly />
+        {useDate &&
+          <DatePicker />}
+        {useTime &&
+          <TimePicker />}
+      </div>
+    </DateTimeProvider>
   )
 }
 
